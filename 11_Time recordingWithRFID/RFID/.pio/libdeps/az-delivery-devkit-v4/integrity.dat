@@ -1,0 +1,4 @@
+bblanchon/ArduinoJson @ ^6.19.3
+erropix/ESP32 AnalogWrite @ ^0.2
+knolleary/PubSubClient @ ^2.8
+miguelbalboa/MFRC522 @ ^1.4.10

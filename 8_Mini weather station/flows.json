@@ -1,0 +1,368 @@
+[
+    {
+        "id": "edf9ffb923e3f688",
+        "type": "tab",
+        "label": "miniweatherstation",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0801aa60aea50e3e",
+        "type": "mqtt in",
+        "z": "edf9ffb923e3f688",
+        "name": "",
+        "topic": "weatherstation",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "90f959af495fc74e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 460,
+        "y": 240,
+        "wires": [
+            [
+                "3a0bde58ec07fb21",
+                "cdc9398afc7dc0e4",
+                "243a6a9e268ff3d0"
+            ]
+        ]
+    },
+    {
+        "id": "3a0bde58ec07fb21",
+        "type": "debug",
+        "z": "edf9ffb923e3f688",
+        "name": "debug 37",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "cdc9398afc7dc0e4",
+        "type": "influxdb out",
+        "z": "edf9ffb923e3f688",
+        "influxdb": "407356953f9d449a",
+        "name": "",
+        "measurement": "miniweatherstation",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "pixeledi",
+        "bucket": "nodered",
+        "x": 850,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "c2a95ad6fc16c5c5",
+        "type": "mqtt out",
+        "z": "edf9ffb923e3f688",
+        "name": "",
+        "topic": "fan",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "90f959af495fc74e",
+        "x": 630,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "99d2c3c05eb79780",
+        "type": "inject",
+        "z": "edf9ffb923e3f688",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 470,
+        "y": 520,
+        "wires": [
+            [
+                "c2a95ad6fc16c5c5"
+            ]
+        ]
+    },
+    {
+        "id": "2ddebfefa939796e",
+        "type": "inject",
+        "z": "edf9ffb923e3f688",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "false",
+        "payloadType": "bool",
+        "x": 470,
+        "y": 560,
+        "wires": [
+            [
+                "c2a95ad6fc16c5c5"
+            ]
+        ]
+    },
+    {
+        "id": "a760f381c87b482c",
+        "type": "hysteresis",
+        "z": "edf9ffb923e3f688",
+        "name": "",
+        "ThresholdType": "fixed",
+        "ThresholdRising": "29",
+        "ThresholdFalling": "27",
+        "TopicThreshold": "",
+        "TopicCurrent": "",
+        "ThresholdDeltaRising": "",
+        "ThresholdDeltaFalling": "",
+        "InitialMessage": false,
+        "OutRisingType": "bool",
+        "OutRisingValue": "true",
+        "OutFallingType": "bool",
+        "OutFallingValue": "false",
+        "OutTopicType": "top",
+        "OutTopicValue": "",
+        "DynRaiseError": false,
+        "x": 800,
+        "y": 420,
+        "wires": [
+            [
+                "f78abac6ff4cec13",
+                "306d1bd9b52f7667"
+            ]
+        ]
+    },
+    {
+        "id": "635ff40c25d5678e",
+        "type": "inject",
+        "z": "edf9ffb923e3f688",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "26.5",
+        "payloadType": "num",
+        "x": 470,
+        "y": 380,
+        "wires": [
+            [
+                "a760f381c87b482c"
+            ]
+        ]
+    },
+    {
+        "id": "d3a2564a7f65cf0f",
+        "type": "inject",
+        "z": "edf9ffb923e3f688",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "28",
+        "payloadType": "num",
+        "x": 470,
+        "y": 420,
+        "wires": [
+            [
+                "a760f381c87b482c"
+            ]
+        ]
+    },
+    {
+        "id": "acab0e18b6266e21",
+        "type": "inject",
+        "z": "edf9ffb923e3f688",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "32",
+        "payloadType": "num",
+        "x": 470,
+        "y": 460,
+        "wires": [
+            [
+                "a760f381c87b482c"
+            ]
+        ]
+    },
+    {
+        "id": "f78abac6ff4cec13",
+        "type": "debug",
+        "z": "edf9ffb923e3f688",
+        "name": "debug 38",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1000,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "306d1bd9b52f7667",
+        "type": "mqtt out",
+        "z": "edf9ffb923e3f688",
+        "name": "",
+        "topic": "fan",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "90f959af495fc74e",
+        "x": 990,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "243a6a9e268ff3d0",
+        "type": "function",
+        "z": "edf9ffb923e3f688",
+        "name": "function 9",
+        "func": "let temp = msg.payload[\"temperature\"].toFixed(2);\nmsg.payload = temp;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 340,
+        "wires": [
+            [
+                "a760f381c87b482c"
+            ]
+        ]
+    },
+    {
+        "id": "90f959af495fc74e",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "http://5.75.238.225/",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "connection",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "MQTT Verbindung unterbrochen",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "407356953f9d449a",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "InfluxDB-eng",
+        "usetls": false,
+        "tls": "688371b84824b880",
+        "influxdbVersion": "2.0",
+        "url": "http://5.75.238.225:8086",
+        "rejectUnauthorized": false
+    },
+    {
+        "id": "688371b84824b880",
+        "type": "tls-config",
+        "name": "",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": true,
+        "alpnprotocol": ""
+    }
+]

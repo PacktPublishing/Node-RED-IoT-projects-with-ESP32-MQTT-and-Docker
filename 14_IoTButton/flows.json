@@ -1,0 +1,223 @@
+[
+    {
+        "id": "149fa7ca1d5f2a33",
+        "type": "tab",
+        "label": "iot button",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "99b34c6d552d78aa",
+        "type": "inject",
+        "z": "149fa7ca1d5f2a33",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 510,
+        "y": 260,
+        "wires": [
+            [
+                "47e937d81e22232b"
+            ]
+        ]
+    },
+    {
+        "id": "508587ba16664c8f",
+        "type": "inject",
+        "z": "149fa7ca1d5f2a33",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "false",
+        "payloadType": "bool",
+        "x": 510,
+        "y": 320,
+        "wires": [
+            [
+                "47e937d81e22232b"
+            ]
+        ]
+    },
+    {
+        "id": "47e937d81e22232b",
+        "type": "function",
+        "z": "149fa7ca1d5f2a33",
+        "name": "Switch.set",
+        "func": "let rndid = Math.floor(Math.random()*1000);\nlet onOff = msg.payload;\n\nlet newMsg={};\nnewMsg.payload={\"id\": rndid, \"src\": \"nodered_info\", \"method\":\"Switch.Set\", \"params\": {\"id\":0, \"on\":onOff}};\n\nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 280,
+        "wires": [
+            [
+                "a9752ee71ee6e2bb"
+            ]
+        ]
+    },
+    {
+        "id": "a9752ee71ee6e2bb",
+        "type": "mqtt out",
+        "z": "149fa7ca1d5f2a33",
+        "name": "",
+        "topic": "shellyplus1pm/rpc",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "90f959af495fc74e",
+        "x": 950,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "47ad4d832a2cf6bc",
+        "type": "mqtt in",
+        "z": "149fa7ca1d5f2a33",
+        "name": "",
+        "topic": "iotbutton",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "90f959af495fc74e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 460,
+        "y": 400,
+        "wires": [
+            [
+                "da1f20b321c4a3ad"
+            ]
+        ]
+    },
+    {
+        "id": "4045aedfbee61fd3",
+        "type": "debug",
+        "z": "149fa7ca1d5f2a33",
+        "name": "debug 71",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "da1f20b321c4a3ad",
+        "type": "toggle",
+        "z": "149fa7ca1d5f2a33",
+        "name": "",
+        "onOffTopic": "",
+        "onValue": "true",
+        "onType": "bool",
+        "offValue": "false",
+        "offType": "bool",
+        "toggleTopic": "",
+        "toggleValue": "",
+        "toggleType": "any",
+        "passOnOff": "",
+        "x": 650,
+        "y": 440,
+        "wires": [
+            [
+                "4045aedfbee61fd3",
+                "47e937d81e22232b"
+            ]
+        ]
+    },
+    {
+        "id": "03b1bb651eb8b6c3",
+        "type": "inject",
+        "z": "149fa7ca1d5f2a33",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 480,
+        "y": 460,
+        "wires": [
+            [
+                "da1f20b321c4a3ad"
+            ]
+        ]
+    },
+    {
+        "id": "90f959af495fc74e",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "http://5.75.238.225/",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "connection",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "MQTT is broken",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]

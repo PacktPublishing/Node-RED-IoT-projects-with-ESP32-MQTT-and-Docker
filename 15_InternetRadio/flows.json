@@ -1,0 +1,302 @@
+[
+    {
+        "id": "c5a9637cf3b3967d",
+        "type": "tab",
+        "label": "InternetRadio",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "af3e3831a7e82e5e",
+        "type": "inject",
+        "z": "c5a9637cf3b3967d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "00 06 * * 1,2,3,4,5",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 450,
+        "y": 240,
+        "wires": [
+            [
+                "4f1c11acfdd9e93e"
+            ]
+        ]
+    },
+    {
+        "id": "4f1c11acfdd9e93e",
+        "type": "mqtt out",
+        "z": "c5a9637cf3b3967d",
+        "name": "",
+        "topic": "iradio/pauseResume",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "90f959af495fc74e",
+        "x": 680,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "ae74a9c7a0291c11",
+        "type": "mqtt in",
+        "z": "c5a9637cf3b3967d",
+        "name": "",
+        "topic": "iradio/streamtitle",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "90f959af495fc74e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 460,
+        "y": 140,
+        "wires": [
+            [
+                "1e932b9ddcb1678a",
+                "275ea7f44bfd59d9"
+            ]
+        ]
+    },
+    {
+        "id": "275ea7f44bfd59d9",
+        "type": "debug",
+        "z": "c5a9637cf3b3967d",
+        "name": "debug 15",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "8b54c0a766f3e510",
+        "type": "inject",
+        "z": "c5a9637cf3b3967d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 450,
+        "y": 360,
+        "wires": [
+            [
+                "8d3b017328b7f572"
+            ]
+        ]
+    },
+    {
+        "id": "8d3b017328b7f572",
+        "type": "mqtt out",
+        "z": "c5a9637cf3b3967d",
+        "name": "",
+        "topic": "iradio/setVolume",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "90f959af495fc74e",
+        "x": 690,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "854b864cee3a91e6",
+        "type": "inject",
+        "z": "c5a9637cf3b3967d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "10",
+        "payloadType": "num",
+        "x": 450,
+        "y": 400,
+        "wires": [
+            [
+                "8d3b017328b7f572"
+            ]
+        ]
+    },
+    {
+        "id": "5c9917c8c2a9eed9",
+        "type": "ui_button",
+        "z": "c5a9637cf3b3967d",
+        "name": "",
+        "group": "5855e926d7192b61",
+        "order": 2,
+        "width": "3",
+        "height": "1",
+        "passthru": false,
+        "label": "on/off",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "fa-solid fa-toggle-on",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 430,
+        "y": 280,
+        "wires": [
+            [
+                "4f1c11acfdd9e93e"
+            ]
+        ]
+    },
+    {
+        "id": "1e932b9ddcb1678a",
+        "type": "ui_text",
+        "z": "c5a9637cf3b3967d",
+        "group": "5855e926d7192b61",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "x": 650,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "2f8ea9eacb83c818",
+        "type": "ui_slider",
+        "z": "c5a9637cf3b3967d",
+        "name": "",
+        "label": "slider",
+        "tooltip": "",
+        "group": "5855e926d7192b61",
+        "order": 3,
+        "width": "3",
+        "height": "1",
+        "passthru": true,
+        "outs": "all",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": "1",
+        "max": "25",
+        "step": 1,
+        "className": "",
+        "x": 430,
+        "y": 440,
+        "wires": [
+            [
+                "8d3b017328b7f572"
+            ]
+        ]
+    },
+    {
+        "id": "4af61041bba17948",
+        "type": "comment",
+        "z": "c5a9637cf3b3967d",
+        "name": "install \"node-red-dashboard\"",
+        "info": "",
+        "x": 480,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "90f959af495fc74e",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "http://5.75.238.225/",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "connection",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "MQTT is broken",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "5855e926d7192b61",
+        "type": "ui_group",
+        "name": "Group 1",
+        "tab": "b7a58d92471f1a08",
+        "order": 1,
+        "disp": false,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "b7a58d92471f1a08",
+        "type": "ui_tab",
+        "name": "InternetRadio",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]

@@ -1,0 +1,520 @@
+[
+    {
+        "id": "4b706c98058ae0aa",
+        "type": "tab",
+        "label": "TimeTagger",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "d7cc2b350e9710d6",
+        "type": "mqtt in",
+        "z": "4b706c98058ae0aa",
+        "name": "",
+        "topic": "time/esp",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "90f959af495fc74e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 420,
+        "y": 120,
+        "wires": [
+            [
+                "e0edad6690ab7ead"
+            ]
+        ]
+    },
+    {
+        "id": "ca028448e09578ab",
+        "type": "mqtt in",
+        "z": "4b706c98058ae0aa",
+        "name": "",
+        "topic": "time/blank",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "90f959af495fc74e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 420,
+        "y": 220,
+        "wires": [
+            [
+                "9c09e7e63b101736"
+            ]
+        ]
+    },
+    {
+        "id": "e0edad6690ab7ead",
+        "type": "debug",
+        "z": "4b706c98058ae0aa",
+        "name": "debug 58",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "9c09e7e63b101736",
+        "type": "debug",
+        "z": "4b706c98058ae0aa",
+        "name": "debug 59",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "978994cdbccc50d1",
+        "type": "inject",
+        "z": "4b706c98058ae0aa",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 260,
+        "y": 380,
+        "wires": [
+            [
+                "e7d733b8cb51cd60"
+            ]
+        ]
+    },
+    {
+        "id": "e7d733b8cb51cd60",
+        "type": "function",
+        "z": "4b706c98058ae0aa",
+        "name": "Authtoken",
+        "func": "\nmsg.headers={};\nmsg.headers['authtoken'] =\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBpeGVsZWRpIiwiZXhwaXJlcyI6MzI1MDM3NDg0MDAsInNlZWQiOiIyZkhnVzdQMjlwTSJ9.MjTQwisIgb_vb_M2b6MCYbEN1ZxK5BqxVoh9VRukM0k\";\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 380,
+        "wires": [
+            [
+                "33fb8c327b638ad8"
+            ]
+        ]
+    },
+    {
+        "id": "33fb8c327b638ad8",
+        "type": "http request",
+        "z": "4b706c98058ae0aa",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "5.75.238.225:8082/timetagger/api/v2/records?timerange=1678394411-1689394411",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 570,
+        "y": 380,
+        "wires": [
+            [
+                "dc35bced6d7a4019"
+            ]
+        ]
+    },
+    {
+        "id": "dc35bced6d7a4019",
+        "type": "debug",
+        "z": "4b706c98058ae0aa",
+        "name": "debug 60",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "176b68dd361bb6be",
+        "type": "inject",
+        "z": "4b706c98058ae0aa",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 240,
+        "y": 440,
+        "wires": [
+            [
+                "20bd80f3f7e1a4e0"
+            ]
+        ]
+    },
+    {
+        "id": "20bd80f3f7e1a4e0",
+        "type": "function",
+        "z": "4b706c98058ae0aa",
+        "name": "create Entry",
+        "func": "\nlet timstmp = Math.floor(new Date().getTime() / 1000);\nlet randomKey = Math.random().toString(36).slice(2,15);\n\n//node.warn(randomKey);\n\nlet newRecord={\n    key: randomKey,\n    t1: timstmp,\n    t2: timstmp+60*15,\n    ds: \"from NodeRED v2\",\n    mt: timstmp,\n    st: 0.0\n}\n\nlet list=[newRecord];\nmsg.payload = list;\n\nmsg.headers={};\nmsg.headers['authtoken'] =\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBpeGVsZWRpIiwiZXhwaXJlcyI6MzI1MDM3NDg0MDAsInNlZWQiOiIyZkhnVzdQMjlwTSJ9.MjTQwisIgb_vb_M2b6MCYbEN1ZxK5BqxVoh9VRukM0k\";\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 440,
+        "wires": [
+            [
+                "2e317fa7a6bec296"
+            ]
+        ]
+    },
+    {
+        "id": "2e317fa7a6bec296",
+        "type": "http request",
+        "z": "4b706c98058ae0aa",
+        "name": "",
+        "method": "PUT",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "5.75.238.225:8082/timetagger/api/v2/records",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 570,
+        "y": 440,
+        "wires": [
+            [
+                "26d84ad2f0bd6bec"
+            ]
+        ]
+    },
+    {
+        "id": "26d84ad2f0bd6bec",
+        "type": "debug",
+        "z": "4b706c98058ae0aa",
+        "name": "debug 61",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "ab6d3bf6acd14c5e",
+        "type": "mqtt in",
+        "z": "4b706c98058ae0aa",
+        "name": "",
+        "topic": "time/blank",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "90f959af495fc74e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 580,
+        "wires": [
+            [
+                "017f7ffabc4d78b6"
+            ]
+        ]
+    },
+    {
+        "id": "5b375e2324714e35",
+        "type": "file",
+        "z": "4b706c98058ae0aa",
+        "name": "",
+        "filename": "/data/timerecords.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 440,
+        "y": 660,
+        "wires": [
+            [
+                "c7365e9f3af5dcb4"
+            ]
+        ]
+    },
+    {
+        "id": "ad4a842006c375df",
+        "type": "function",
+        "z": "4b706c98058ae0aa",
+        "name": "create Entry",
+        "func": "\nlet timstmp = Math.floor(new Date().getTime() / 1000);\nlet randomKey = Math.random().toString(36).slice(2,15);\nlet description = msg.payload;\n\n//node.warn(randomKey);\n\nlet newRecord={\n    key: randomKey,\n    t1: timstmp,\n    t2: timstmp+60*15,\n    ds: description,\n    mt: timstmp,\n    st: 0.0\n}\n\nlet list=[newRecord];\nmsg.payload = list;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 250,
+        "y": 660,
+        "wires": [
+            [
+                "5b375e2324714e35"
+            ]
+        ]
+    },
+    {
+        "id": "c7365e9f3af5dcb4",
+        "type": "debug",
+        "z": "4b706c98058ae0aa",
+        "name": "debug 62",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "017f7ffabc4d78b6",
+        "type": "fs-access",
+        "z": "4b706c98058ae0aa",
+        "name": "",
+        "path": "/data",
+        "pathType": "str",
+        "filename": "timerecords.txt",
+        "filenameType": "str",
+        "accessRead": true,
+        "accessWrite": true,
+        "x": 350,
+        "y": 580,
+        "wires": [
+            [
+                "ec116fea0c7cf347"
+            ],
+            [
+                "ad4a842006c375df"
+            ]
+        ]
+    },
+    {
+        "id": "ec116fea0c7cf347",
+        "type": "file in",
+        "z": "4b706c98058ae0aa",
+        "name": "",
+        "filename": "/data/timerecords.txt",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 560,
+        "y": 560,
+        "wires": [
+            [
+                "0401524eb2c58f75"
+            ]
+        ]
+    },
+    {
+        "id": "0401524eb2c58f75",
+        "type": "json",
+        "z": "4b706c98058ae0aa",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 750,
+        "y": 560,
+        "wires": [
+            [
+                "8c572127c4a66146"
+            ]
+        ]
+    },
+    {
+        "id": "8c572127c4a66146",
+        "type": "function",
+        "z": "4b706c98058ae0aa",
+        "name": "Authtoken",
+        "func": "var timestamp = Math.floor(new Date().getTime() / 1000);\nvar newRecord = msg.payload;\n\nnewRecord[0][\"t2\"] = timestamp;\n\nmsg.payload = newRecord;\n\nmsg.headers={};\nmsg.headers['authtoken'] =\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBpeGVsZWRpIiwiZXhwaXJlcyI6MzI1MDM3NDg0MDAsInNlZWQiOiIyZkhnVzdQMjlwTSJ9.MjTQwisIgb_vb_M2b6MCYbEN1ZxK5BqxVoh9VRukM0k\";\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 560,
+        "wires": [
+            [
+                "54990d45586903b9"
+            ]
+        ]
+    },
+    {
+        "id": "54990d45586903b9",
+        "type": "http request",
+        "z": "4b706c98058ae0aa",
+        "name": "",
+        "method": "PUT",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "5.75.238.225:8082/timetagger/api/v2/records",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 870,
+        "y": 640,
+        "wires": [
+            [
+                "e714e1af07a4f87e",
+                "7a8d0becf19391e0"
+            ]
+        ]
+    },
+    {
+        "id": "e714e1af07a4f87e",
+        "type": "debug",
+        "z": "4b706c98058ae0aa",
+        "name": "debug 63",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "7a8d0becf19391e0",
+        "type": "fs-remove",
+        "z": "4b706c98058ae0aa",
+        "path": "/data",
+        "pathType": "str",
+        "filename": "timerecords.txt",
+        "filenameType": "str",
+        "recursive": true,
+        "exist": false,
+        "name": "",
+        "x": 1050,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "39d1dfb2acaf8720",
+        "type": "mqtt in",
+        "z": "4b706c98058ae0aa",
+        "name": "",
+        "topic": "time/esp",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "90f959af495fc74e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 520,
+        "wires": [
+            [
+                "017f7ffabc4d78b6"
+            ]
+        ]
+    },
+    {
+        "id": "90f959af495fc74e",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "http://5.75.238.225/",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "connection",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "MQTT is broken",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]

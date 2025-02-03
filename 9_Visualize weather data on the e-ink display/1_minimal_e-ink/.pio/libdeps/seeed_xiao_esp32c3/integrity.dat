@@ -1,0 +1,4 @@
+erropix/ESP32 AnalogWrite @ ^0.2
+bblanchon/ArduinoJson @ ^6.19.3
+zinggjm/GxEPD2 @ ^1.5.0
+knolleary/PubSubClient @ ^2.8

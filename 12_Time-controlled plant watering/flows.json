@@ -1,0 +1,675 @@
+[
+    {
+        "id": "666254853d7fc28e",
+        "type": "tab",
+        "label": "wateringplants",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "60c7490e4f6c1787",
+        "type": "debug",
+        "z": "666254853d7fc28e",
+        "name": "debug 64",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "ee746792fffeec65",
+        "type": "inject",
+        "z": "666254853d7fc28e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "68d294223650c437",
+        "type": "mqtt in",
+        "z": "666254853d7fc28e",
+        "name": "",
+        "topic": "pumpInfo",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "90f959af495fc74e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 100,
+        "wires": [
+            [
+                "653e8cc407478e45"
+            ]
+        ]
+    },
+    {
+        "id": "41036adba1e8deda",
+        "type": "mqtt out",
+        "z": "666254853d7fc28e",
+        "name": "",
+        "topic": "pumpStart",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "90f959af495fc74e",
+        "x": 650,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "ba3fb8786e4356ee",
+        "type": "mqtt in",
+        "z": "666254853d7fc28e",
+        "name": "",
+        "topic": "WaterDistance",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "90f959af495fc74e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 400,
+        "wires": [
+            [
+                "0419b4c670b1efe3"
+            ]
+        ]
+    },
+    {
+        "id": "1e0d335c9d3faadd",
+        "type": "debug",
+        "z": "666254853d7fc28e",
+        "name": "debug 65",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "1b0e325d61897179",
+        "type": "mysql",
+        "z": "666254853d7fc28e",
+        "mydb": "0b907d97bcdeb713",
+        "name": "",
+        "x": 570,
+        "y": 400,
+        "wires": [
+            [
+                "1e0d335c9d3faadd",
+                "8b203a2240dd64db"
+            ]
+        ]
+    },
+    {
+        "id": "0419b4c670b1efe3",
+        "type": "function",
+        "z": "666254853d7fc28e",
+        "name": "SQL INSERT",
+        "func": "\nlet currenttimestamp = Math.floor(new Date().getTime() / 1000);\nlet distance1 = msg.payload[\"distance1\"];\nlet distance2 = msg.payload[\"distance2\"];\n\nmsg.topic = \"INSERT INTO plants_level (timestamp, distance1, distance2) VALUES (\" + currenttimestamp+\",\"+distance1+\",\"+distance2+\")\";\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 400,
+        "wires": [
+            [
+                "1b0e325d61897179"
+            ]
+        ]
+    },
+    {
+        "id": "653e8cc407478e45",
+        "type": "function",
+        "z": "666254853d7fc28e",
+        "name": "SQL SELECT",
+        "func": "\nmsg.topic = \"SELECT timestamp from plants_level ORDER BY id DESC LIMIT 1\";\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 100,
+        "wires": [
+            [
+                "3693b9320bf0aa67"
+            ]
+        ]
+    },
+    {
+        "id": "3693b9320bf0aa67",
+        "type": "mysql",
+        "z": "666254853d7fc28e",
+        "mydb": "0b907d97bcdeb713",
+        "name": "",
+        "x": 510,
+        "y": 100,
+        "wires": [
+            [
+                "1ea1cfd2a2acf836"
+            ]
+        ]
+    },
+    {
+        "id": "1ea1cfd2a2acf836",
+        "type": "function",
+        "z": "666254853d7fc28e",
+        "name": "only timestamp",
+        "func": "msg.payload = msg.payload[0][\"timestamp\"];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 100,
+        "wires": [
+            [
+                "4d2743f8b9cc553e"
+            ]
+        ]
+    },
+    {
+        "id": "4d2743f8b9cc553e",
+        "type": "function",
+        "z": "666254853d7fc28e",
+        "name": "time difference",
+        "func": "// edit here the time\nlet timediff = (30);\n\n//current timestamp\nlet currenttimestamp = Math.floor(new Date().getTime() / 1000);\n\nlet lastTimestampFromDB= msg.payload;\n\nif(currenttimestamp - lastTimestampFromDB > timediff){\n    msg.payload=\"1\";\n}\nelse msg.payload=\"0\";\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 180,
+        "wires": [
+            [
+                "41036adba1e8deda",
+                "60c7490e4f6c1787"
+            ]
+        ]
+    },
+    {
+        "id": "a55deb1770a86a90",
+        "type": "inject",
+        "z": "666254853d7fc28e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 540,
+        "wires": [
+            [
+                "9537175671f6e92b"
+            ]
+        ]
+    },
+    {
+        "id": "9537175671f6e92b",
+        "type": "function",
+        "z": "666254853d7fc28e",
+        "name": "SQL SELECT",
+        "func": "\nmsg.topic = \"SELECT distance1 from plants_level ORDER BY id DESC LIMIT 1\";\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 540,
+        "wires": [
+            [
+                "141e299916165cf9"
+            ]
+        ]
+    },
+    {
+        "id": "141e299916165cf9",
+        "type": "mysql",
+        "z": "666254853d7fc28e",
+        "mydb": "0b907d97bcdeb713",
+        "name": "",
+        "x": 470,
+        "y": 540,
+        "wires": [
+            [
+                "ddda266b77faeeb8"
+            ]
+        ]
+    },
+    {
+        "id": "ddda266b77faeeb8",
+        "type": "function",
+        "z": "666254853d7fc28e",
+        "name": "function 28",
+        "func": "let distance1 = msg.payload[0][\"distance1\"];\nlet containersize = 24;\nlet onethird = 16;\n\nif(distance1 >= onethird){\n    //notify\n}\nelse {\n    //Nothing should happend\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 540,
+        "wires": [
+            [
+                "d36a5c06c43e8009"
+            ]
+        ]
+    },
+    {
+        "id": "d36a5c06c43e8009",
+        "type": "debug",
+        "z": "666254853d7fc28e",
+        "name": "debug 66",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "7dd3b92f6ca55c7a",
+        "type": "link out",
+        "z": "666254853d7fc28e",
+        "name": "after water distance saved in DB",
+        "mode": "link",
+        "links": [
+            "be2003d7b4162d6d"
+        ],
+        "x": 845,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "8b203a2240dd64db",
+        "type": "delay",
+        "z": "666254853d7fc28e",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "2",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 720,
+        "y": 340,
+        "wires": [
+            [
+                "7dd3b92f6ca55c7a"
+            ]
+        ]
+    },
+    {
+        "id": "be2003d7b4162d6d",
+        "type": "link in",
+        "z": "666254853d7fc28e",
+        "name": "check water level and notification",
+        "links": [
+            "7dd3b92f6ca55c7a"
+        ],
+        "x": 135,
+        "y": 500,
+        "wires": [
+            [
+                "9537175671f6e92b"
+            ]
+        ]
+    },
+    {
+        "id": "bec81b1b8622cdf5",
+        "type": "mqtt in",
+        "z": "666254853d7fc28e",
+        "name": "",
+        "topic": "recorddeepsleep",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "90f959af495fc74e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 660,
+        "wires": [
+            [
+                "594600019683499f"
+            ]
+        ]
+    },
+    {
+        "id": "594600019683499f",
+        "type": "function",
+        "z": "666254853d7fc28e",
+        "name": "SQL INSERT",
+        "func": "let currenttimestamp = Math.floor(new Date().getTime() / 1000);\n\nmsg.topic = \"INSERT INTO deepsleep_plants (timestamp) VALUES (\" + currenttimestamp+\")\";\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 660,
+        "wires": [
+            [
+                "281f5284ed60d6e3"
+            ]
+        ]
+    },
+    {
+        "id": "281f5284ed60d6e3",
+        "type": "mysql",
+        "z": "666254853d7fc28e",
+        "mydb": "0b907d97bcdeb713",
+        "name": "",
+        "x": 490,
+        "y": 660,
+        "wires": [
+            [
+                "ea09d9793e7cbe29"
+            ]
+        ]
+    },
+    {
+        "id": "ea09d9793e7cbe29",
+        "type": "debug",
+        "z": "666254853d7fc28e",
+        "name": "debug 67",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "342eee2eaf942c50",
+        "type": "ui_ui_control",
+        "z": "666254853d7fc28e",
+        "name": "",
+        "events": "all",
+        "x": 160,
+        "y": 800,
+        "wires": [
+            [
+                "449287523f594f1f"
+            ]
+        ]
+    },
+    {
+        "id": "7a36773a5e577e47",
+        "type": "inject",
+        "z": "666254853d7fc28e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 840,
+        "wires": [
+            [
+                "449287523f594f1f"
+            ]
+        ]
+    },
+    {
+        "id": "449287523f594f1f",
+        "type": "function",
+        "z": "666254853d7fc28e",
+        "name": "SQL SELECT",
+        "func": "\nmsg.topic = \"SELECT * from plants_level ORDER BY id DESC LIMIT 1\";\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 820,
+        "wires": [
+            [
+                "da21dfc3961adece"
+            ]
+        ]
+    },
+    {
+        "id": "da21dfc3961adece",
+        "type": "mysql",
+        "z": "666254853d7fc28e",
+        "mydb": "0b907d97bcdeb713",
+        "name": "",
+        "x": 550,
+        "y": 820,
+        "wires": [
+            [
+                "cf232baa0e2278fa"
+            ]
+        ]
+    },
+    {
+        "id": "cf232baa0e2278fa",
+        "type": "function",
+        "z": "666254853d7fc28e",
+        "name": "function 29",
+        "func": "let msg0 = {};\nlet msg1 = {};\nlet msg2 = {};\n\nlet container = 24;\n\nmsg0.payload=(container - msg.payload[0].distance1);\nmsg0.topic=\"Glücksfeder\";\n\n//msg1 for the second plant\n\nlet dateObject = new Date(msg.payload[0].timestamp * 1000);\nlet humanDateFormat = dateObject.toLocaleDateString(\"de-De\");\n\nmsg2.payload=humanDateFormat;\nmsg2.topic=\"Last watering\";\n\nreturn [msg0, msg1, msg2];",
+        "outputs": 3,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 820,
+        "wires": [
+            [
+                "7d77fa1541b36170"
+            ],
+            [],
+            [
+                "f220124c79c9b21b"
+            ]
+        ]
+    },
+    {
+        "id": "7d77fa1541b36170",
+        "type": "ui_chart",
+        "z": "666254853d7fc28e",
+        "name": "",
+        "group": "b4bbdc3504174cde",
+        "order": 0,
+        "width": "6",
+        "height": "4",
+        "label": "Wateringlevels",
+        "chartType": "bar",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "24",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 940,
+        "y": 800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f220124c79c9b21b",
+        "type": "ui_text",
+        "z": "666254853d7fc28e",
+        "group": "b4bbdc3504174cde",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "last watering",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "className": "",
+        "x": 930,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "90f959af495fc74e",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "http://5.75.238.225/",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "connection",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "MQTT is broken",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "0b907d97bcdeb713",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "5.75.238.225",
+        "port": "3306",
+        "db": "plants",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "b4bbdc3504174cde",
+        "type": "ui_group",
+        "name": "Standard",
+        "tab": "469bcf25dc9b9059",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "469bcf25dc9b9059",
+        "type": "ui_tab",
+        "name": "WateringPlants",
+        "icon": "dashboard",
+        "order": 13,
+        "disabled": false,
+        "hidden": false
+    }
+]

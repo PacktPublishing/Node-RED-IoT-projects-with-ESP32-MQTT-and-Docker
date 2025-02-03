@@ -1,0 +1,717 @@
+[
+    {
+        "id": "cc2c78f068015c4b",
+        "type": "tab",
+        "label": "smartplugs",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "bffb2c011ee84b6f",
+        "type": "inject",
+        "z": "cc2c78f068015c4b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "on",
+        "payloadType": "str",
+        "x": 470,
+        "y": 120,
+        "wires": [
+            [
+                "1f5b6dceeaf8afe1"
+            ]
+        ]
+    },
+    {
+        "id": "bb02fd920ed7af6c",
+        "type": "inject",
+        "z": "cc2c78f068015c4b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "off",
+        "payloadType": "str",
+        "x": 470,
+        "y": 160,
+        "wires": [
+            [
+                "1f5b6dceeaf8afe1"
+            ]
+        ]
+    },
+    {
+        "id": "1f5b6dceeaf8afe1",
+        "type": "mqtt out",
+        "z": "cc2c78f068015c4b",
+        "name": "",
+        "topic": "cmnd/tasmota_4DBEF3/POWER",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "90f959af495fc74e",
+        "x": 760,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "4ab6438d1315bae4",
+        "type": "mqtt in",
+        "z": "cc2c78f068015c4b",
+        "name": "",
+        "topic": "tele/tasmota_4DBEF3/SENSOR",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "90f959af495fc74e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 550,
+        "y": 300,
+        "wires": [
+            [
+                "50f4b032816bb907",
+                "b559e71ffb86b8f7"
+            ]
+        ]
+    },
+    {
+        "id": "50f4b032816bb907",
+        "type": "debug",
+        "z": "cc2c78f068015c4b",
+        "name": "debug 68",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "b559e71ffb86b8f7",
+        "type": "function",
+        "z": "cc2c78f068015c4b",
+        "name": "function 30",
+        "func": "let todayPower = msg.payload[\"ENERGY\"][\"Today\"];\nlet voltage = (msg.payload[\"ENERGY\"][\"Voltage\"]);\nlet power = (msg.payload[\"ENERGY\"][\"Power\"]);\nlet activePower = (msg.payload[\"ENERGY\"][\"ApparentPower\"]);\nlet total = (msg.payload[\"ENERGY\"][\"Total\"]);\n\nmsg.payload=[\n    {\n        Today: todayPower,\n        Voltage: voltage,\n        Power: power,\n        ActivePower: activePower,\n        Total: total\n    }\n]\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 360,
+        "wires": [
+            [
+                "5d6cc47308bb42c3"
+            ]
+        ]
+    },
+    {
+        "id": "5d6cc47308bb42c3",
+        "type": "influxdb out",
+        "z": "cc2c78f068015c4b",
+        "influxdb": "990b9cf89e0521e6",
+        "name": "",
+        "measurement": "tasmota",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "pixeledi",
+        "bucket": "nodered",
+        "x": 830,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "6bd4b28a7e78e9a0",
+        "type": "inject",
+        "z": "cc2c78f068015c4b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 660,
+        "y": 520,
+        "wires": [
+            [
+                "ea37400f58ca7b97"
+            ]
+        ]
+    },
+    {
+        "id": "ea37400f58ca7b97",
+        "type": "function",
+        "z": "cc2c78f068015c4b",
+        "name": "MQTT.GetStatus",
+        "func": "let rndid = Math.floor(Math.random()*1000);\nlet newMsg={};\nnewMsg.payload={\"id\": rndid, \"src\": \"nodered_info\", \"method\":\"Mqtt.GetStatus\"};\n\n\nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 520,
+        "wires": [
+            [
+                "4be997f2275b94eb"
+            ]
+        ]
+    },
+    {
+        "id": "4be997f2275b94eb",
+        "type": "mqtt out",
+        "z": "cc2c78f068015c4b",
+        "name": "",
+        "topic": "shellyplus1pm/rpc",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "90f959af495fc74e",
+        "x": 1110,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "69ea4833e7d27131",
+        "type": "mqtt in",
+        "z": "cc2c78f068015c4b",
+        "name": "",
+        "topic": "nodered_info/rpc",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "90f959af495fc74e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 680,
+        "y": 720,
+        "wires": [
+            [
+                "d56adafd0f0364a1"
+            ]
+        ]
+    },
+    {
+        "id": "d56adafd0f0364a1",
+        "type": "debug",
+        "z": "cc2c78f068015c4b",
+        "name": "debug 69",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 980,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "d1c083819ed1307d",
+        "type": "inject",
+        "z": "cc2c78f068015c4b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 660,
+        "y": 580,
+        "wires": [
+            [
+                "212f0742e2f50fd7"
+            ]
+        ]
+    },
+    {
+        "id": "212f0742e2f50fd7",
+        "type": "function",
+        "z": "cc2c78f068015c4b",
+        "name": "MQTT.SysStatus",
+        "func": "let rndid = Math.floor(Math.random()*1000);\nlet newMsg={};\nnewMsg.payload={\"id\": rndid, \"src\": \"nodered_info\", \"method\":\"Sys.GetStatus\"};\n\n\nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 580,
+        "wires": [
+            [
+                "4be997f2275b94eb"
+            ]
+        ]
+    },
+    {
+        "id": "9f937d698b431422",
+        "type": "function",
+        "z": "cc2c78f068015c4b",
+        "name": "MQTT.SwitchStatus",
+        "func": "let rndid = Math.floor(Math.random()*1000);\nlet newMsg={};\nnewMsg.payload={\"id\": rndid, \"src\": \"nodered_info\", \"method\":\"Switch.GetStatus\",\"params\":{\"id\":0}};\n\n\nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 640,
+        "wires": [
+            [
+                "4be997f2275b94eb"
+            ]
+        ]
+    },
+    {
+        "id": "14ca7070a1419e97",
+        "type": "inject",
+        "z": "cc2c78f068015c4b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 660,
+        "y": 640,
+        "wires": [
+            [
+                "9f937d698b431422"
+            ]
+        ]
+    },
+    {
+        "id": "f1b7ab77c40880a4",
+        "type": "inject",
+        "z": "cc2c78f068015c4b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "x": 650,
+        "y": 820,
+        "wires": [
+            [
+                "2da6e9f086909740"
+            ]
+        ]
+    },
+    {
+        "id": "3170744469f3f88e",
+        "type": "inject",
+        "z": "cc2c78f068015c4b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "false",
+        "payloadType": "bool",
+        "x": 650,
+        "y": 880,
+        "wires": [
+            [
+                "2da6e9f086909740"
+            ]
+        ]
+    },
+    {
+        "id": "2da6e9f086909740",
+        "type": "function",
+        "z": "cc2c78f068015c4b",
+        "name": "Switch.set",
+        "func": "let rndid = Math.floor(Math.random()*1000);\nlet onOff = msg.payload;\n\nlet newMsg={};\nnewMsg.payload={\"id\": rndid, \"src\": \"nodered_info\", \"method\":\"Switch.Set\", \"params\": {\"id\":0, \"on\":onOff, \"toggle_after\":3}};\n\nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 840,
+        "wires": [
+            [
+                "a6a3584b6da522f4"
+            ]
+        ]
+    },
+    {
+        "id": "a6a3584b6da522f4",
+        "type": "mqtt out",
+        "z": "cc2c78f068015c4b",
+        "name": "",
+        "topic": "shellyplus1pm/rpc",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "90f959af495fc74e",
+        "x": 1010,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "7801f7b1c38e015a",
+        "type": "inject",
+        "z": "cc2c78f068015c4b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 630,
+        "y": 1040,
+        "wires": [
+            [
+                "8bb3b780cb299f04"
+            ]
+        ]
+    },
+    {
+        "id": "8bb3b780cb299f04",
+        "type": "function",
+        "z": "cc2c78f068015c4b",
+        "name": "MQTT.SwitchStatus",
+        "func": "let rndid = Math.floor(Math.random()*1000);\nlet newMsg={};\nnewMsg.payload={\"id\": rndid, \"src\": \"nodered_info_interval\", \"method\":\"Switch.GetStatus\",\"params\":{\"id\":0}};\n\n\nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 1040,
+        "wires": [
+            [
+                "844e2b84edbfd7c2"
+            ]
+        ]
+    },
+    {
+        "id": "aa52345c36ae2e71",
+        "type": "mqtt out",
+        "z": "cc2c78f068015c4b",
+        "name": "",
+        "topic": "shellyplus1pm/rpc",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "90f959af495fc74e",
+        "x": 1210,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "03ea7e1fdb215ea2",
+        "type": "mqtt in",
+        "z": "cc2c78f068015c4b",
+        "name": "",
+        "topic": "nodered_info_interval/rpc",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "90f959af495fc74e",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 670,
+        "y": 1120,
+        "wires": [
+            [
+                "8c36767954425cda",
+                "7ababdc39fb0a90c",
+                "c8299786cf94bed6"
+            ]
+        ]
+    },
+    {
+        "id": "8c36767954425cda",
+        "type": "debug",
+        "z": "cc2c78f068015c4b",
+        "name": "debug 70",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1060,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "7ababdc39fb0a90c",
+        "type": "function",
+        "z": "cc2c78f068015c4b",
+        "name": "temperature",
+        "func": "\nlet newMsg={};\nlet internTemperature = msg.payload[\"result\"][\"temperature\"][\"tC\"];\n\n//node.warn(internTemperature);\n\nif(internTemperature>70){\n    newMsg.payload={};\n    newMsg.payload.chatId =\"5881594804\"\n    newMsg.payload.content = \"☠️🛑 Shelly Temperatur is to high: \"+internTemperature;\n    newMsg.payload.type = \"message\";\n\n    newMsg.topic=\"ShellyValues\";\n    return newMsg;\n}\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 910,
+        "y": 1200,
+        "wires": [
+            [
+                "d34fbcf7aa538762"
+            ]
+        ]
+    },
+    {
+        "id": "d34fbcf7aa538762",
+        "type": "telegram sender",
+        "z": "cc2c78f068015c4b",
+        "name": "",
+        "bot": "0ecb167addd473dd",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1110,
+        "y": 1200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c8299786cf94bed6",
+        "type": "function",
+        "z": "cc2c78f068015c4b",
+        "name": "function 31",
+        "func": "let newMsg = {};\n\nlet voltage = (msg.payload[\"result\"][\"voltage\"]);\nlet current = (msg.payload[\"result\"][\"current\"]);\nlet apower = (msg.payload[\"result\"][\"apower\"])\nlet aengery = (msg.payload[\"result\"][\"aenergy\"][\"total\"]) / 1000; //watt-stunden in kw/h\nlet aengerybyminute = (msg.payload[\"result\"][\"aenergy\"][\"by_minute\"][0]) / (1000 * 1000); // milliwatt-stunden in kw/h\naengerybyminute = Number(aengerybyminute.toFixed(10))\nlet internTemperature = (msg.payload[\"result\"][\"temperature\"][\"tC\"]);\n\n\nnewMsg.payload = [\n    {\n        Voltage: voltage,\n        Current: current,\n        Apower: apower,\n        Aenergy: aengery,\n        AengeryByminute: aengerybyminute,\n        InterneTemperatur: internTemperature\n    }\n]\n\nnewMsg.topic = \"ShellyValues\"\n\nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 890,
+        "y": 1280,
+        "wires": [
+            [
+                "af87a4057c0be975"
+            ]
+        ]
+    },
+    {
+        "id": "af87a4057c0be975",
+        "type": "influxdb out",
+        "z": "cc2c78f068015c4b",
+        "influxdb": "990b9cf89e0521e6",
+        "name": "",
+        "measurement": "shelly",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "pixeledi",
+        "bucket": "nodered",
+        "x": 1130,
+        "y": 1280,
+        "wires": []
+    },
+    {
+        "id": "844e2b84edbfd7c2",
+        "type": "function",
+        "z": "cc2c78f068015c4b",
+        "name": "function 32",
+        "func": "let currenttimestamp = Math.floor(new Date().getTime());\nlet d = new Date(currenttimestamp);\nlet hour = d.getHours();\n\nif(hour > 10 && hour < 23){\n    return msg;\n}\nelse {\n    node.warn(\"outside hours\");\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1010,
+        "y": 1040,
+        "wires": [
+            [
+                "aa52345c36ae2e71"
+            ]
+        ]
+    },
+    {
+        "id": "90f959af495fc74e",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "http://5.75.238.225/",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "connection",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "MQTT is broken",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "990b9cf89e0521e6",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "InfluxDB pixelEDI",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://5.75.238.225:8086",
+        "rejectUnauthorized": false
+    },
+    {
+        "id": "0ecb167addd473dd",
+        "type": "telegram bot",
+        "botname": "nodered_course_bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "updatemode": "polling",
+        "pollinterval": "300",
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": "6667",
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbotport": "8443",
+        "publicbotport": "8443",
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    }
+]
